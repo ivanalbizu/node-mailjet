@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const mailjet = require('node-mailjet').connect("ApiKey", "ApiValue");//TO-DO. Add Values
+//const mailjet = require('node-mailjet').connect("ApiKey", "ApiValue");//TO-DO. Add Values
 
 const app = express();
 const PORT = 3000;
@@ -35,6 +35,41 @@ app.get('/send', (req, res) => {
     
 });
 
+app.get('/send/:template_ID', (req, res) => {
+    var options = {
+		"Messages":[
+			{
+				"From": {
+					"Email": "ivan.gonzalez@redegal.com",
+					"Name": "Mailjet Pilot"
+				},
+				"To": [
+					{
+					"Email": "ivan.gonzalez@redegal.com",
+					"Name": "passenger 1"
+					}
+				],
+				"TemplateID": 854088,
+				"TemplateLanguage": true,
+				"Subject": "Your email flight plan!"
+			}
+		]
+	}
+
+    const request = mailjet.post("send/"+req.params.template_ID).request(options);
+    
+    request
+        .then(result => {
+            console.log(result.body)
+        })
+        .catch(err => {
+            console.log(err.statusCode)
+        })
+    
+    res.send(req.params.template_ID);
+    
+});
+
 app.get('/template', (req, res) => {
     const request = mailjet.get("template").request();
     request
@@ -46,6 +81,37 @@ app.get('/template', (req, res) => {
         })
     
     res.send('consulta template');
+});
+
+app.get('/create-template', (req, res) => {
+    var options = {
+        "Author": "John Doe",
+        "Categories": [
+            "commerce"
+        ],
+        "Copyright": "John Doe",
+        "Description": "Used for discount promotion.",
+        "EditMode": 1,
+        "IsStarred": true,
+        "IsTextPartGenerationEnabled": true,
+        "Locale": "en_US",
+        "Name": "Promo Code",
+        "OwnerType": "apikey",
+        "Presets": "{\"h1\":{\"fontFamily\":\"'Arial Black', Helvetica, Arial, sans-serif\"}}",
+        "Purposes": [
+            "marketing"
+        ]
+    }
+    const request = mailjet.post("template").request(options);
+    request
+        .then(result => {
+            console.log(result.body)
+        })
+        .catch(err => {
+            console.log(err.statusCode)
+        })
+    
+    res.send('create template');
 });
 
 app.get('/template/:template_ID', (req, res) => {

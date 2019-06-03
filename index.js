@@ -24,8 +24,8 @@ app.get('/send', (req, res) => {
     const request = mailjet.post("send").request(options);
     
     request
-        .then(res => {
-            console.log(res.body)
+        .then(result => {
+            console.log(result.body)
         })
         .catch(err => {
             console.log(err.statusCode)
@@ -38,21 +38,21 @@ app.get('/send', (req, res) => {
 app.get('/template', (req, res) => {
     const request = mailjet.get("template").request();
     request
-        .then(res => {
-            console.log(res.body)
+        .then(result => {
+            console.log(result.body)
         })
         .catch(err => {
             console.log(err.statusCode)
         })
     
-    res.send('consulta');
+    res.send('consulta template');
 });
 
 app.get('/template/:template_ID', (req, res) => {
     const request = mailjet.get("template/"+req.params.template_ID).request();
     request
-        .then(res => {
-            console.log(res.body)
+        .then(result => {
+            console.log(result.body)
         })
         .catch(err => {
             console.log(err.statusCode)
@@ -64,8 +64,8 @@ app.get('/template/:template_ID', (req, res) => {
 app.get('/template/:template_ID/detailcontent', (req, res) => {
     const request = mailjet.get("template/"+req.params.template_ID+"/detailcontent").request();
     request
-    .then(res => {
-        console.log(res.body)
+    .then(result => {
+        console.log(result.body)
     })
     .catch(err => {
         console.log(err.statusCode)
@@ -75,35 +75,29 @@ app.get('/template/:template_ID/detailcontent', (req, res) => {
 });
 
 app.get('/contact', (req, res) => {
-    const request = mailjet.get('contact')
-                                .request(function (err, res, body) {
-                                    console.log (err || body);
-                                });
+    const request = mailjet.get('contact').request();
     request
-        .then(res => {
-            console.log(res.body)
+        .then(result => {
+            console.log("Response Body ", result.body)
         })
         .catch(err => {
-            console.log(err.statusCode)
+            console.log("Error StatusCode ", err.statusCode)
         })
-    
-    res.send('consulta contenido Template '+request);
+        
+    res.send("Listado de contactos");
 });
 
 app.get('/user', (req, res) => {
-    const request = mailjet.get('user')
-                                .request(function (err, res, body) {
-                                    console.log (err || body);
-                                });
+    const request = mailjet.get('user').request();
     request
-        .then(res => {
-            console.log(res.body)
+        .then(result => {
+            console.log(result.body)
         })
         .catch(err => {
             console.log(err.statusCode)
         })
         
-    res.send('consulta contenido Template '+res.body);
+    res.send('consulta contenido Template');
 });
 
 app.use('/', router);

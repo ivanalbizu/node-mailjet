@@ -1,4 +1,4 @@
-## Connect Node + Mailjet
+## Connect Node + Mailjet API
 node 12
 
 ## Install
